@@ -1577,7 +1577,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                 Column(
                   children: [
                     Text(
-                      'If clear and cold:',
+                      'If clear and hot:',
                       style: TextStyle(fontSize: 21),
                     ),
                     Lottie.asset(
@@ -1964,7 +1964,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                 Column(
                   children: [
                     Text(
-                      'If clear and hot:',
+                      'If clear and cold:',
                       style: TextStyle(fontSize: 21),
                     ),
                     Lottie.asset(
