@@ -1,0 +1,58 @@
+PODS:
+  - awesome_notifications (0.8.1):
+    - Flutter
+    - IosAwnCore (~> 0.8.0)
+  - connectivity_plus (0.0.1):
+    - Flutter
+    - ReachabilitySwift
+  - Flutter (1.0.0)
+  - IosAwnCore (0.8.0)
+  - package_info_plus (0.4.5):
+    - Flutter
+  - ReachabilitySwift (5.0.0)
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - url_launcher_ios (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - awesome_notifications (from `.symlinks/plugins/awesome_notifications/ios`)
+  - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
+  - Flutter (from `Flutter`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+
+SPEC REPOS:
+  trunk:
+    - IosAwnCore
+    - ReachabilitySwift
+
+EXTERNAL SOURCES:
+  awesome_notifications:
+    :path: ".symlinks/plugins/awesome_notifications/ios"
+  connectivity_plus:
+    :path: ".symlinks/plugins/connectivity_plus/ios"
+  Flutter:
+    :path: Flutter
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
+  shared_preferences_foundation:
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
+
+SPEC CHECKSUMS:
+  awesome_notifications: db394d2e061e4583ba0f738ddea611e3986cc3fb
+  connectivity_plus: bf0076dd84a130856aa636df1c71ccaff908fa1d
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  IosAwnCore: ed1b2b6d84962a758354dbacd9ce525c72ce28a9
+  package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
+  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
+  shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
+  url_launcher_ios: bf5ce03e0e2088bad9cc378ea97fa0ed5b49673b
+
+PODFILE CHECKSUM: 20379832a879632aa9d043f10cc6bccfee58b18a
+
+COCOAPODS: 1.14.3
