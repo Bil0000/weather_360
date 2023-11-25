@@ -1,3 +1,7 @@
+# LICENSE
+
+This code is only for test and for learning it is not allowed to publish an app with this code or an edited version of this code for more information check out the LICENSE.md
+
 # weather_360
 
 Introducing Weather 360 – your ultimate weather wizard! Revolutionize the way you plan your day with a touch of magic. Whether you're an indoor enthusiast or an outdoor explorer, Weather 360 is your spellbinding solution.

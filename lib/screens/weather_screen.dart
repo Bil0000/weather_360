@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:weather_360/screens/activity_screen.dart';
 import 'package:weather_360/screens/cloth_screen.dart';
 import 'package:weather_360/screens/selectedcity_screen.dart';
@@ -338,6 +340,32 @@ class _WeatherPageState extends State<WeatherPage> {
         );
       },
     );
+  }
+
+  Future<void> _shareWeatherConditions() async {
+    if (fiveDayForecast.isNotEmpty) {
+      final Weather currentWeather = fiveDayForecast[0];
+
+      final String appLink =
+          'Android:\n https://play.google.com/store/apps/details?id=com.halaltek.weatherapp\n IOS: Comming soon!!';
+
+      // Create a message with weather information
+      final String message = 'Weather in ${widget.selectedCity}:\n'
+          '${currentWeather.weatherDescription}\n'
+          'Temperature: ${convertTemperature(currentWeather.temperature!.celsius!).toStringAsFixed(2)}°${widget.temperatureUnit == TemperatureUnit.fahrenheit ? 'F' : 'C'}\n'
+          'Humidity: ${formatNumber(currentWeather.humidity!.toDouble())}%\n'
+          'Wind: ${formatNumber(currentWeather.windSpeed! * 3.6)} km/h\n\n'
+          'Did you know? Our app provides personalized weather recommendations! 🌦️\n'
+          'Discover what to wear, what activities to plan, and more! Install now.\n'
+          'App Link: $appLink';
+
+      await Share.share(message);
+    } else {
+      final snackBar = SnackBar(
+        content: Text('Weather data is not available.'),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 
   @override
@@ -688,6 +716,14 @@ class _WeatherPageState extends State<WeatherPage> {
                   } else {
                     await _showUnsubscribeConfirmationDialog();
                   }
+                },
+              ),
+              const Divider(),
+              ListTile(
+                leading: Icon(Icons.share),
+                title: Text('Share weather for ${widget.selectedCity}'),
+                onTap: () async {
+                  await _shareWeatherConditions();
                 },
               ),
               const Divider(),

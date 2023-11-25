@@ -265,8 +265,8 @@ class _CitySelectionScreenState extends State<CitySelectionScreen> {
   Color getBackgroundColor(String? city) {
     if (city != null && cityWeatherMap[city] != null) {
       double temperature = cityWeatherMap[city]!.temperature!.celsius ?? 0.0;
-      final double minTemperature = -30;
-      final double maxTemperature = 40;
+      final double minTemperature = -40;
+      final double maxTemperature = 30;
       final double mappedValue =
           (temperature - minTemperature) / (maxTemperature - minTemperature);
       final int redComponent = (255 * mappedValue).toInt();
@@ -433,10 +433,14 @@ class _CitySelectionScreenState extends State<CitySelectionScreen> {
                                       ),
                                     );
                                   },
-                                  child: Text(
-                                    'Privacy Policy',
-                                    style: TextStyle(
-                                      color: Colors.blue,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        right: 15, bottom: 15),
+                                    child: Text(
+                                      'Privacy Policy',
+                                      style: TextStyle(
+                                        color: Colors.blue[300],
+                                      ),
                                     ),
                                   ),
                                 ),
