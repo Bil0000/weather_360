@@ -268,7 +268,6 @@ class _WeatherPageState extends State<WeatherPage> {
         int hour = selectedTime.hour;
         int minute = selectedTime.minute;
 
-        // Use the current time to find the relevant forecast data
         DateTime now = DateTime.now();
         Weather currentForecast = fiveDayForecast.firstWhere(
           (forecast) =>

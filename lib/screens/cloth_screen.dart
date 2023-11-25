@@ -25,7 +25,6 @@ class _ClothScreenState extends State<ClothScreen> {
       body: SingleChildScrollView(
         child: Center(
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 20),
@@ -34,8 +33,6 @@ class _ClothScreenState extends State<ClothScreen> {
                   style: TextStyle(fontSize: 20),
                 ),
               ),
-              // Add clothing suggestions based on the weather condition
-              // Customize this part according to your needs
               if (widget.weatherCondition.toLowerCase().contains('rain'))
                 Column(
                   children: [
