@@ -609,7 +609,7 @@ class _WeatherPageState extends State<WeatherPage> {
                     const Text('Weather 360'),
                     SizedBox(height: 3),
                     Text(
-                      'Version: 4.0.0',
+                      'Version: 4.0.1',
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey,

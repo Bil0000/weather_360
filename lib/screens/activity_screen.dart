@@ -47,7 +47,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                     ),
                     SizedBox(height: 20),
                     Text(
-                      'Do:',
+                      'Activities:',
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
@@ -434,7 +434,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                     ),
                     SizedBox(height: 20),
                     Text(
-                      'Do:',
+                      'Activities:',
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
@@ -817,7 +817,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                     ),
                     SizedBox(height: 20),
                     Text(
-                      'Do:',
+                      'Activities:',
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
@@ -1201,7 +1201,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                     ),
                     SizedBox(height: 20),
                     Text(
-                      'Do:',
+                      'Activities:',
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
@@ -1573,10 +1573,13 @@ class _ActivityScreenState extends State<ActivityScreen> {
                     ),
                   ],
                 ),
-              if (widget.weatherCondition.toLowerCase().contains('clear') &&
-                  widget.temperature >= 20)
+              if (widget.weatherCondition.toLowerCase().contains('clear sky'))
                 Column(
                   children: [
+                    Text(
+                      'If clear and cold:',
+                      style: TextStyle(fontSize: 21),
+                    ),
                     Lottie.asset(
                       'assets/hotcloth.json',
                       height: 200,
@@ -1585,7 +1588,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                     ),
                     SizedBox(height: 20),
                     Text(
-                      'Do:',
+                      'Activities:',
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
@@ -1957,10 +1960,13 @@ class _ActivityScreenState extends State<ActivityScreen> {
                     ),
                   ],
                 ),
-              if (widget.weatherCondition.toLowerCase().contains('clear') &&
-                  widget.temperature <= 15)
+              if (widget.weatherCondition.toLowerCase().contains('clear sky'))
                 Column(
                   children: [
+                    Text(
+                      'If clear and hot:',
+                      style: TextStyle(fontSize: 21),
+                    ),
                     Lottie.asset(
                       'assets/coldcloth.json',
                       height: 200,
@@ -1969,7 +1975,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                     ),
                     SizedBox(height: 20),
                     Text(
-                      'Do:',
+                      'Activities:',
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
@@ -2352,7 +2358,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                     ),
                     SizedBox(height: 20),
                     Text(
-                      'Do:',
+                      'Activities:',
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
