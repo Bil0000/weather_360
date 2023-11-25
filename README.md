@@ -34,6 +34,12 @@ Unlock the magic with Weather360 – your weather wizard! Forecast, fashion, and
 play store: https://play.google.com/store/apps/details?id=com.halaltek.weatherapp
 app store comming soon!!
 
+## Getting Started
+
+1. get an API key from openweathermap.
+
+2. in your code rename the .env.example to .env then put your API key in the API_KEY place.
+
 ![app_image13](https://github.com/Bil0000/weather_360/assets/62337003/19d67b55-c679-484a-80a5-ce28fa49eb82)
 ![app_image12](https://github.com/Bil0000/weather_360/assets/62337003/5a1d1341-2035-4b3f-b08a-89136ae2e435)
 ![app_image11](https://github.com/Bil0000/weather_360/assets/62337003/63e148b2-2e39-45ba-b2e8-e748910968d5)
@@ -43,10 +49,3 @@ app store comming soon!!
 ![app_image3](https://github.com/Bil0000/weather_360/assets/62337003/22881077-d714-4ad1-99ac-dfa65c4a82c1)
 ![app_image2](https://github.com/Bil0000/weather_360/assets/62337003/ff4941b0-2551-48d9-8032-e547bbbd214c)
 ![app_image1](https://github.com/Bil0000/weather_360/assets/62337003/8118a0c4-56cb-4007-bda1-471c2eff3183)
-
-
-## Getting Started
-
-1. get an API key from openweathermap.
-
-2. in your code rename the .env.example to .env then put your API key in the API_KEY place.
