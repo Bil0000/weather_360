@@ -262,6 +262,21 @@ class _CitySelectionScreenState extends State<CitySelectionScreen> {
     await updateAllCities();
   }
 
+  Color getBackgroundColor(String? city) {
+    if (city != null && cityWeatherMap[city] != null) {
+      double temperature = cityWeatherMap[city]!.temperature!.celsius ?? 0.0;
+      final double minTemperature = -30;
+      final double maxTemperature = 40;
+      final double mappedValue =
+          (temperature - minTemperature) / (maxTemperature - minTemperature);
+      final int redComponent = (255 * mappedValue).toInt();
+      final int blueComponent = (255 * (1 - mappedValue)).toInt();
+
+      return Color.fromRGBO(redComponent, 0, blueComponent, 1);
+    }
+    return Color.fromRGBO(57, 26, 73, 1);
+  }
+
   @override
   Widget build(BuildContext context) {
     final deviceHeight = MediaQuery.of(context).size.height;
@@ -282,16 +297,18 @@ class _CitySelectionScreenState extends State<CitySelectionScreen> {
         ],
       ),
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
+              getBackgroundColor(selectedCity),
               Color.fromRGBO(57, 26, 73, 1),
               Color.fromRGBO(48, 29, 92, 1),
               Color.fromRGBO(38, 33, 113, 1),
               Color.fromRGBO(48, 29, 92, 1),
               Color.fromRGBO(57, 26, 73, 1),
+              getBackgroundColor(selectedCity),
             ],
           ),
         ),
