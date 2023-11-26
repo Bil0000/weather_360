@@ -108,12 +108,6 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
             );
           },
         );
-        // newVersion.showUpdateDialog(
-        //   context: context,
-        //   versionStatus: status,
-        //   dialogText: 'New Version is available in the store (${status.storeVersion}), update now!',
-        //   dialogTitle: 'Update is Available!',
-        // );
       }
     }
   }
@@ -143,7 +137,6 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      // App resumed from the background
       AwesomeNotifications().resetGlobalBadge();
     }
   }
@@ -364,7 +357,6 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
       final String appLink =
           'Android:\n https://play.google.com/store/apps/details?id=com.halaltek.weatherapp\n IOS: Comming soon!!';
 
-      // Create a message with weather information
       final String message = 'Weather in ${widget.selectedCity}:\n'
           '${currentWeather.weatherDescription}\n'
           'Temperature: ${convertTemperature(currentWeather.temperature!.celsius!).toStringAsFixed(2)}°${widget.temperatureUnit == TemperatureUnit.fahrenheit ? 'F' : 'C'}\n'
@@ -567,7 +559,6 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
                                       bottom: 20,
                                     ),
                                     child: Container(
-                                      // height: 150,
                                       width: double.infinity,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(30),

@@ -481,7 +481,6 @@ class _CitySelectionScreenState extends State<CitySelectionScreen> {
                               child: Container(
                                 key: Key(city),
                                 width: double.infinity,
-                                // height: 153,
                                 padding: const EdgeInsets.all(18.0),
                                 margin:
                                     const EdgeInsets.symmetric(vertical: 8.0),
