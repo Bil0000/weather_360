@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_carousel_slider/carousel_slider.dart';
 import 'package:weather_360/intro/intro_screen1.dart';
 import 'package:weather_360/intro/intro_screen2.dart';
 import 'package:weather_360/intro/intro_screen3.dart';
@@ -17,7 +18,7 @@ class OnBoardingScreen extends StatefulWidget {
 }
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
-  PageController _controller = PageController();
+  CarouselSliderController _controller = CarouselSliderController();
 
   bool onLastPage = false;
   @override
@@ -25,9 +26,14 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          PageView(
+          CarouselSlider(
+            slideTransform: CubeTransform(),
+            slideIndicator: CircularSlideIndicator(
+              alignment: Alignment(0, 0.86),
+              padding: EdgeInsets.only(right: 10, left: 5),
+            ),
             controller: _controller,
-            onPageChanged: (index) {
+            onSlideChanged: (index) {
               setState(() {
                 onLastPage = (index == 3);
               });
@@ -41,12 +47,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           ),
           Center(
             child: Container(
-              alignment: Alignment(0, 0.87),
+              alignment: Alignment(0, 0.86),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(right: 25),
+                    padding: const EdgeInsets.only(right: 70),
                     child: GestureDetector(
                       onTap: () async {
                         await setIsFirstTime(false);
@@ -62,17 +68,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       },
                       child: Text('Skip'),
                     ),
-                  ),
-                  SmoothPageIndicator(
-                    controller: _controller,
-                    count: 4,
-                    onDotClicked: (index) {
-                      _controller.animateToPage(
-                        index,
-                        duration: Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                      );
-                    },
                   ),
                   onLastPage
                       ? Padding(
@@ -97,10 +92,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           padding: const EdgeInsets.only(left: 25),
                           child: GestureDetector(
                             onTap: () async {
-                              _controller.nextPage(
-                                duration: Duration(milliseconds: 500),
-                                curve: Curves.easeIn,
-                              );
+                              _controller.nextPage();
                             },
                             child: Text('Next'),
                           ),

@@ -83,6 +83,7 @@ class _MyAppState extends State<MyApp> {
             NotificationController.onNotificationDisplayedMethod,
         onDismissActionReceivedMethod:
             NotificationController.onDismissActionReceivedMethod);
+
     super.initState();
   }
 

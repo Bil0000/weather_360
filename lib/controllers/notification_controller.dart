@@ -13,10 +13,14 @@ class NotificationController {
 
   @pragma("vm:entry-point")
   static Future<void> onDismissActionReceivedMethod(
-      ReceivedAction receivedAction) async {}
+      ReceivedAction receivedAction) async {
+    AwesomeNotifications().decrementGlobalBadgeCounter();
+  }
 
   /// Use this method to detect when the user taps on a notification or action button
   @pragma("vm:entry-point")
   static Future<void> onActionReceivedMethod(
-      ReceivedAction receivedAction) async {}
+      ReceivedAction receivedAction) async {
+    AwesomeNotifications().decrementGlobalBadgeCounter();
+  }
 }

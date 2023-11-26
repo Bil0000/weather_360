@@ -224,7 +224,10 @@ class _CitySelectionScreenState extends State<CitySelectionScreen> {
                 Navigator.of(context).pop(true);
                 removeCity(city);
               },
-              child: Text('Confirm'),
+              child: Text(
+                'Confirm',
+                style: TextStyle(color: Colors.red),
+              ),
             ),
           ],
         );

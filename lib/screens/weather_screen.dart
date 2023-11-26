@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:weather_360/controllers/notification_controller.dart';
 import 'package:weather_360/screens/activity_screen.dart';
 import 'package:weather_360/screens/cloth_screen.dart';
 import 'package:weather_360/screens/selectedcity_screen.dart';
@@ -32,7 +33,7 @@ class WeatherPage extends StatefulWidget {
   State<WeatherPage> createState() => _WeatherPageState();
 }
 
-class _WeatherPageState extends State<WeatherPage> {
+class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   bool _isMounted = false;
@@ -62,6 +63,9 @@ class _WeatherPageState extends State<WeatherPage> {
   void initState() {
     super.initState();
     _isMounted = true;
+
+    WidgetsBinding.instance.addObserver(this);
+
     Future.delayed(const Duration(seconds: 2), () {
       if (_isMounted) {
         _loadTemperatureUnit();
@@ -69,6 +73,7 @@ class _WeatherPageState extends State<WeatherPage> {
         _loadNotificationStatus();
       }
     });
+    AwesomeNotifications().resetGlobalBadge();
     final newVersion = NewVersionPlus(
       androidId: 'com.halaltek.weatherapp',
     );
@@ -134,7 +139,16 @@ class _WeatherPageState extends State<WeatherPage> {
   @override
   void dispose() {
     _isMounted = false;
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // App resumed from the background
+      AwesomeNotifications().resetGlobalBadge();
+    }
   }
 
   Future<void> fetchFiveDayForecast() async {
@@ -281,6 +295,7 @@ class _WeatherPageState extends State<WeatherPage> {
 
         AwesomeNotifications().createNotification(
           content: NotificationContent(
+            badge: 1,
             id: 1,
             channelKey: "weather_channel",
             title: "Weather 360",
@@ -334,7 +349,10 @@ class _WeatherPageState extends State<WeatherPage> {
 
                 Navigator.of(context).pop();
               },
-              child: Text('Unsubscribe'),
+              child: Text(
+                'Unsubscribe',
+                style: TextStyle(color: Colors.red),
+              ),
             ),
           ],
         );
@@ -381,6 +399,12 @@ class _WeatherPageState extends State<WeatherPage> {
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
           actions: [
+            IconButton(
+              icon: const Icon(Icons.share),
+              onPressed: () async {
+                await _shareWeatherConditions();
+              },
+            ),
             Padding(
               padding: const EdgeInsets.only(right: 10),
               child: IconButton(
@@ -459,9 +483,10 @@ class _WeatherPageState extends State<WeatherPage> {
                                   Text(
                                     '${convertTemperature(fiveDayForecast[0].temperature!.celsius!).toStringAsFixed(2)}°${widget.temperatureUnit == TemperatureUnit.fahrenheit ? 'F' : 'C'}',
                                     style: const TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                   SizedBox(
                                     height: deviceHeight * 0.116,
@@ -636,7 +661,7 @@ class _WeatherPageState extends State<WeatherPage> {
                     const Text('Weather 360'),
                     SizedBox(height: 3),
                     Text(
-                      'Version: 4.0.1',
+                      'Version: 5.0.0',
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey,
@@ -716,14 +741,6 @@ class _WeatherPageState extends State<WeatherPage> {
                   } else {
                     await _showUnsubscribeConfirmationDialog();
                   }
-                },
-              ),
-              const Divider(),
-              ListTile(
-                leading: Icon(Icons.share),
-                title: Text('Share weather for ${widget.selectedCity}'),
-                onTap: () async {
-                  await _shareWeatherConditions();
                 },
               ),
               const Divider(),
