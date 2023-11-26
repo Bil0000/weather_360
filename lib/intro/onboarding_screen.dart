@@ -6,7 +6,6 @@ import 'package:weather_360/intro/intro_screen3.dart';
 import 'package:weather_360/intro/intro_screen4.dart';
 import 'package:weather_360/screens/selectedcity_screen.dart';
 import 'package:weather_360/utils/preferences.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   final List<String> selectedCities;

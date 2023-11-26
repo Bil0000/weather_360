@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:weather_360/controllers/notification_controller.dart';
 import 'package:weather_360/screens/activity_screen.dart';
 import 'package:weather_360/screens/cloth_screen.dart';
 import 'package:weather_360/screens/selectedcity_screen.dart';
@@ -18,7 +16,6 @@ import 'package:new_version_plus/new_version_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather/weather.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
 
 class WeatherPage extends StatefulWidget {
   String selectedCity;
