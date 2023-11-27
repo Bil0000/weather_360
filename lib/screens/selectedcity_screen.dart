@@ -290,12 +290,20 @@ class _CitySelectionScreenState extends State<CitySelectionScreen> {
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
         automaticallyImplyLeading: false,
-        title: const Text('Saved Locations'),
+        title: const Text(
+          'Saved Locations',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         centerTitle: false,
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 25),
-            child: Icon(Icons.search),
+            child: Icon(
+              Icons.search,
+              color: Colors.white,
+            ),
           ),
         ],
       ),

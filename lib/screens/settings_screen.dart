@@ -45,9 +45,22 @@ class _SettingsState extends State<Settings> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         shadowColor: Colors.transparent,
         backgroundColor: Colors.transparent,
-        title: Text('Settings'),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: Icon(Icons.arrow_back),
+          color: Colors.white,
+        ),
+        title: Text(
+          'Settings',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         centerTitle: true,
       ),
       body: Container(

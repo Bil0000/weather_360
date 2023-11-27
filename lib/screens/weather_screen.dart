@@ -389,7 +389,10 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
           shadowColor: Colors.transparent,
           actions: [
             IconButton(
-              icon: const Icon(Icons.share),
+              icon: const Icon(
+                Icons.share,
+                color: Colors.white,
+              ),
               onPressed: () async {
                 await _shareWeatherConditions();
               },
@@ -397,7 +400,10 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
             Padding(
               padding: const EdgeInsets.only(right: 10),
               child: IconButton(
-                icon: const Icon(Icons.menu),
+                icon: const Icon(
+                  Icons.menu,
+                  color: Colors.white,
+                ),
                 onPressed: () async {
                   _scaffoldKey.currentState!.openDrawer();
                 },
@@ -412,7 +418,12 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
                     Image.asset('assets/location.png', height: 35),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 7),
-                      child: Text(widget.selectedCity.toString()),
+                      child: Text(
+                        widget.selectedCity.toString(),
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -450,7 +461,7 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
                                         fontSize: 35, color: Colors.white),
                                   ),
                                   SizedBox(
-                                    height: deviceHeight * 0.12,
+                                    height: deviceHeight * 0.09,
                                   ),
                                   Center(
                                     child: Image.network(
@@ -478,7 +489,7 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: deviceHeight * 0.116,
+                                    height: deviceHeight * 0.11,
                                   ),
                                   Row(
                                     mainAxisAlignment:
@@ -649,7 +660,7 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
                     const Text('Weather 360'),
                     SizedBox(height: 3),
                     Text(
-                      'Version: 5.0.0',
+                      'Version: 6.0.0',
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey,
