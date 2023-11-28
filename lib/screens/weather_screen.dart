@@ -360,6 +360,7 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
       final String message = 'Weather in ${widget.selectedCity}:\n'
           '${currentWeather.weatherDescription}\n'
           'Temperature: ${convertTemperature(currentWeather.temperature!.celsius!).toStringAsFixed(2)}°${widget.temperatureUnit == TemperatureUnit.fahrenheit ? 'F' : 'C'}\n'
+          'Feels Like: ${convertTemperature(currentWeather.tempFeelsLike!.celsius!).toStringAsFixed(2)}°${widget.temperatureUnit == TemperatureUnit.fahrenheit ? 'F' : 'C'}\n'
           'Humidity: ${formatNumber(currentWeather.humidity!.toDouble())}%\n'
           'Wind: ${formatNumber(currentWeather.windSpeed! * 3.6)} km/h\n\n'
           'Did you know? Our app provides personalized weather recommendations! 🌦️\n'
