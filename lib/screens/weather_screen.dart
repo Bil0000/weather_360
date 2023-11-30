@@ -709,7 +709,7 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
                     const Text('Weather 360'),
                     SizedBox(height: 3),
                     Text(
-                      'Version: 6.0.0',
+                      'Version: 7.0.0',
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey,
