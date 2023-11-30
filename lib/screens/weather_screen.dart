@@ -105,6 +105,14 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
     final status = await newVersion.getVersionStatus();
     if (status != null) {
       if (status.canUpdate) {
+        AwesomeNotifications().createNotification(
+            content: NotificationContent(
+          id: 1,
+          channelKey: 'weather_channel',
+          title: 'Weather 360 update!',
+          body:
+              'There is a new version update now to version: ${status.storeVersion}!!!',
+        ));
         showDialog(
           context: context,
           builder: (BuildContext context) {
