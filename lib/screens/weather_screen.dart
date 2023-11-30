@@ -50,9 +50,17 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
   String? selectedCity;
 
   List<Weather> fiveDayForecast = [];
+  String _selectedDay = 'Today';
 
   tz.TZDateTime _convertUtcToLocal(tz.TZDateTime utcDateTime) {
     return utcDateTime.toLocal();
+  }
+
+  Weather _getSelectedDayForecast() {
+    return fiveDayForecast.firstWhere(
+      (forecast) => formatDateToDayName(forecast.date!) == _selectedDay,
+      orElse: () => fiveDayForecast[0],
+    );
   }
 
   @override
@@ -152,15 +160,17 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
 
   String formatDateToDayName(DateTime date) {
     final now = DateTime.now();
-    final tomorrow = DateTime(now.year, now.month, now.day + 1);
-
-    if (date.year == tomorrow.year &&
-        date.month == tomorrow.month &&
-        date.day == tomorrow.day) {
+    if (date.year == now.year &&
+        date.month == now.month &&
+        date.day == now.day) {
+      return 'Today';
+    } else if (date.year == now.year &&
+        date.month == now.month &&
+        date.day == now.day + 1) {
       return 'Tomorrow';
+    } else {
+      return DateFormat.E().format(date);
     }
-
-    return DateFormat.E().format(date);
   }
 
   List<List<Weather>?> _groupByDay(List<Weather> data) {
@@ -168,9 +178,9 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
 
     int tomorrowIndex = data.indexWhere((forecast) {
       final tomorrow = DateTime.now().add(Duration(days: 1));
-      return forecast.date!.day == tomorrow.day &&
-          forecast.date!.month == tomorrow.month &&
-          forecast.date!.year == tomorrow.year;
+      final forecastDate = DateTime(
+          forecast.date!.year, forecast.date!.month, forecast.date!.day);
+      return forecastDate.isAtSameMomentAs(tomorrow);
     });
 
     final todayKey = 'Today';
@@ -350,9 +360,12 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
     );
   }
 
-  Future<void> _shareWeatherConditions() async {
+  _shareWeatherConditions() async {
     if (fiveDayForecast.isNotEmpty) {
-      final Weather currentWeather = fiveDayForecast[0];
+      final Weather currentWeather = fiveDayForecast.firstWhere(
+        (forecast) => formatDateToDayName(forecast.date!) == _selectedDay,
+        orElse: () => fiveDayForecast[0],
+      );
 
       final String appLink =
           'Android:\n https://play.google.com/store/apps/details?id=com.halaltek.weatherapp\n IOS: Comming soon!!';
@@ -438,7 +451,7 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
               if (fiveDayForecast.isNotEmpty)
                 Container(
                   child: Lottie.asset(
-                    _getBackgroundImage(fiveDayForecast[0]),
+                    _getBackgroundImage(_getSelectedDayForecast()),
                     height: double.infinity,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -454,181 +467,216 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
                         child: Column(
                           children: [
                             if (fiveDayForecast.isNotEmpty)
-                              Column(
-                                children: [
-                                  const Text(
-                                    'Today',
-                                    style: TextStyle(
-                                        fontSize: 35, color: Colors.white),
-                                  ),
-                                  SizedBox(
-                                    height: deviceHeight * 0.09,
-                                  ),
-                                  Center(
-                                    child: Image.network(
-                                      getWeatherIconUrl(fiveDayForecast[0])
-                                          .toString(),
-                                      height: 130,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  Text(
-                                    fiveDayForecast[0]
-                                        .weatherDescription
-                                        .toString(),
-                                    style: const TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
-                                  ),
-                                  Text(
-                                    '${convertTemperature(fiveDayForecast[0].temperature!.celsius!).toStringAsFixed(2)}°${widget.temperatureUnit == TemperatureUnit.fahrenheit ? 'F' : 'C'}',
-                                    style: const TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: deviceHeight * 0.11,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                              AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 800),
+                                child: FadeTransition(
+                                  key: Key(_selectedDay),
+                                  opacity: const AlwaysStoppedAnimation(1.0),
+                                  child: Column(
                                     children: [
-                                      Column(
-                                        children: [
-                                          const Icon(
-                                            Icons.water_drop_outlined,
-                                            color: Colors.white,
-                                          ),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 20),
-                                            child: Text(
-                                              'Humidity \n${formatNumber(fiveDayForecast[0].humidity!.toDouble())}%',
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                                      Text(
+                                        '$_selectedDay',
+                                        style: TextStyle(
+                                            fontSize: 35, color: Colors.white),
                                       ),
-                                      Column(
-                                        children: [
-                                          const Icon(
-                                            CupertinoIcons.wind,
-                                            color: Colors.white,
-                                          ),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            'Wind Power \n${formatNumber(fiveDayForecast[0].windSpeed! * 3.6)} km/h',
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ],
+                                      SizedBox(
+                                        height: deviceHeight * 0.09,
                                       ),
-                                      Column(
-                                        children: [
-                                          Lottie.asset(
-                                            'assets/therm.json',
-                                            repeat: true,
-                                            height: 40,
-                                            width: 40,
-                                          ),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            'Feels Like',
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          Text(
-                                            '${convertTemperature(fiveDayForecast[0].tempFeelsLike!.celsius!).toStringAsFixed(2)}°${widget.temperatureUnit == TemperatureUnit.fahrenheit ? 'F' : 'C'}',
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ],
+                                      Center(
+                                        child: Image.network(
+                                          getWeatherIconUrl(
+                                                  _getSelectedDayForecast())
+                                              .toString(),
+                                          height: 130,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 10,
-                                      right: 10,
-                                      bottom: 20,
-                                    ),
-                                    child: Container(
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
-                                        color: Colors.black.withOpacity(0.4),
+                                      Text(
+                                        _getSelectedDayForecast()
+                                            .weatherDescription
+                                            .toString(),
+                                        style: const TextStyle(
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white),
                                       ),
-                                      padding: const EdgeInsets.only(
-                                        left: 10,
-                                        right: 10,
-                                        top: 15,
-                                        bottom: 15,
+                                      Text(
+                                        '${convertTemperature(_getSelectedDayForecast().temperature!.celsius!).toStringAsFixed(2)}°${widget.temperatureUnit == TemperatureUnit.fahrenheit ? 'F' : 'C'}',
+                                        style: const TextStyle(
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
                                       ),
-                                      child: Row(
+                                      SizedBox(
+                                        height: deviceHeight * 0.11,
+                                      ),
+                                      Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceAround,
-                                        children: _groupByDay(fiveDayForecast)
-                                            .skip(1)
-                                            .map((dayForecast) {
-                                          Weather firstForecast =
-                                              dayForecast![0];
-                                          return Column(
+                                        children: [
+                                          Column(
                                             children: [
-                                              Text(
-                                                formatDateToDayName(
-                                                    firstForecast.date!),
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.white,
+                                              const Icon(
+                                                Icons.water_drop_outlined,
+                                                color: Colors.white,
+                                              ),
+                                              const SizedBox(
+                                                height: 5,
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 20),
+                                                child: Text(
+                                                  'Humidity \n${formatNumber(_getSelectedDayForecast().humidity!.toDouble())}%',
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                  ),
                                                 ),
                                               ),
-                                              const SizedBox(height: 8),
-                                              Image.network(
-                                                getWeatherIconUrl(firstForecast)
-                                                    .toString(),
-                                                height: 44,
-                                                width: 44,
+                                            ],
+                                          ),
+                                          Column(
+                                            children: [
+                                              const Icon(
+                                                CupertinoIcons.wind,
+                                                color: Colors.white,
                                               ),
-                                              const SizedBox(height: 8),
-                                              Text(
-                                                '${convertTemperature(firstForecast.temperature!.celsius!).toStringAsFixed(2)}°${widget.temperatureUnit == TemperatureUnit.fahrenheit ? 'F' : 'C'}',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.white,
-                                                ),
+                                              const SizedBox(
+                                                height: 5,
                                               ),
-                                              const SizedBox(height: 8),
                                               Text(
-                                                '${formatNumber(firstForecast.windSpeed! * 3.6)}\n km/h',
+                                                'Wind Power \n${formatNumber(_getSelectedDayForecast().windSpeed! * 3.6)} km/h',
                                                 style: const TextStyle(
                                                   color: Colors.white,
                                                 ),
                                               ),
                                             ],
-                                          );
-                                        }).toList(),
+                                          ),
+                                          Column(
+                                            children: [
+                                              Lottie.asset(
+                                                'assets/therm.json',
+                                                repeat: true,
+                                                height: 40,
+                                                width: 40,
+                                              ),
+                                              const SizedBox(
+                                                height: 5,
+                                              ),
+                                              Text(
+                                                'Feels Like',
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              Text(
+                                                '${convertTemperature(_getSelectedDayForecast().tempFeelsLike!.celsius!).toStringAsFixed(2)}°${widget.temperatureUnit == TemperatureUnit.fahrenheit ? 'F' : 'C'}',
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
-                                    ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          left: 10,
+                                          right: 10,
+                                          bottom: 20,
+                                        ),
+                                        child: Container(
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                            color:
+                                                Colors.black.withOpacity(0.4),
+                                          ),
+                                          padding: const EdgeInsets.only(
+                                            left: 10,
+                                            right: 10,
+                                            top: 15,
+                                            bottom: 15,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children:
+                                                _groupByDay(fiveDayForecast)
+                                                    .skip(1)
+                                                    .map((dayForecast) {
+                                              Weather firstForecast =
+                                                  dayForecast![0];
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    _selectedDay =
+                                                        formatDateToDayName(
+                                                            firstForecast
+                                                                .date!);
+                                                  });
+                                                },
+                                                onDoubleTap: () {
+                                                  setState(() {
+                                                    _selectedDay = 'Today';
+                                                  });
+                                                },
+                                                child: Column(
+                                                  children: [
+                                                    Text(
+                                                      formatDateToDayName(
+                                                          firstForecast.date!),
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: _selectedDay ==
+                                                                formatDateToDayName(
+                                                                    firstForecast
+                                                                        .date!)
+                                                            ? Colors
+                                                                .blue // Change color for the selected day
+                                                            : Colors.white,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 8),
+                                                    Image.network(
+                                                      getWeatherIconUrl(
+                                                              firstForecast)
+                                                          .toString(),
+                                                      height: 44,
+                                                      width: 44,
+                                                    ),
+                                                    const SizedBox(height: 8),
+                                                    Text(
+                                                      '${convertTemperature(firstForecast.temperature!.celsius!).toStringAsFixed(2)}°${widget.temperatureUnit == TemperatureUnit.fahrenheit ? 'F' : 'C'}',
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 8),
+                                                    Text(
+                                                      '${formatNumber(firstForecast.windSpeed! * 3.6)}\n km/h',
+                                                      style: const TextStyle(
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
+                                ),
                               ),
                             if (fiveDayForecast.isEmpty)
                               Center(
