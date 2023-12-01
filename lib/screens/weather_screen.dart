@@ -623,10 +623,17 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
                                               return GestureDetector(
                                                 onTap: () {
                                                   setState(() {
-                                                    _selectedDay =
+                                                    if (_selectedDay ==
                                                         formatDateToDayName(
                                                             firstForecast
-                                                                .date!);
+                                                                .date!)) {
+                                                      _selectedDay = 'Today';
+                                                    } else {
+                                                      _selectedDay =
+                                                          formatDateToDayName(
+                                                              firstForecast
+                                                                  .date!);
+                                                    }
                                                   });
                                                 },
                                                 onDoubleTap: () {
