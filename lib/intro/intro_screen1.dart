@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class IntroScreen1 extends StatefulWidget {
@@ -147,6 +148,15 @@ class _IntroScreen1State extends State<IntroScreen1> {
                 ),
               ],
             ),
+            SizedBox(height: 25),
+            if (kIsWeb)
+              Text(
+                'This app is ment to be for mobile so your not going to have the best experience using the app.',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.redAccent[400],
+                ),
+              ),
           ],
         ),
       ),

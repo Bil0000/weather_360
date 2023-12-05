@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:share_plus/share_plus.dart';
@@ -416,7 +418,20 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
                 color: Colors.white,
               ),
               onPressed: () async {
-                await _shareWeatherConditions();
+                if (kIsWeb) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'This feature is only available for mobile devices.',
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                } else if (Platform.isAndroid || Platform.isIOS) {
+                  await _shareWeatherConditions();
+                }
               },
             ),
             Padding(
@@ -714,114 +729,215 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
           ),
         ),
         drawer: Drawer(
-          child: ListView(
+          child: Stack(
             children: [
-              DrawerHeader(
-                child: Column(
-                  children: [
-                    Image.asset('assets/icon.png', height: 80),
-                    const SizedBox(height: 10),
-                    const Text('Weather 360'),
-                    SizedBox(height: 3),
+              ListView(
+                children: [
+                  DrawerHeader(
+                    child: Column(
+                      children: [
+                        Image.asset('assets/icon.png', height: 80),
+                        const SizedBox(height: 10),
+                        const Text('Weather 360'),
+                        SizedBox(height: 3),
+                        Text(
+                          'Version: 7.0.1',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Divider(),
+                  ListTile(
+                    leading: const Icon(Icons.location_on),
+                    title: const Text('Saved Locations'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              CitySelectionScreen(selectedCities: cities),
+                        ),
+                      );
+                    },
+                  ),
+                  const Divider(),
+                  ListTile(
+                    leading: const Icon(Icons.wb_sunny),
+                    title: const Text('What to Wear'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ClothScreen(
+                            weatherCondition: fiveDayForecast.isNotEmpty
+                                ? fiveDayForecast[0].weatherDescription ?? ''
+                                : 'Unknown',
+                            temperature: fiveDayForecast.isNotEmpty
+                                ? fiveDayForecast[0].temperature?.celsius ?? 0.0
+                                : 0.0,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  const Divider(),
+                  ListTile(
+                    leading: const Icon(Icons.run_circle),
+                    title: const Text('What to Do'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ActivityScreen(
+                            weatherCondition: fiveDayForecast.isNotEmpty
+                                ? fiveDayForecast[0].weatherDescription ?? ''
+                                : 'Unknown',
+                            temperature: fiveDayForecast.isNotEmpty
+                                ? fiveDayForecast[0].temperature?.celsius ?? 0.0
+                                : 0.0,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  const Divider(),
+                  ListTile(
+                    leading: Icon(areNotificationsEnabled
+                        ? Icons.notification_add
+                        : Icons.notifications_off),
+                    title: Text(areNotificationsEnabled
+                        ? 'Notifications'
+                        : 'Unsubscribe notifications'),
+                    onTap: () async {
+                      if (kIsWeb) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'This feature is only available for mobile devices.',
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 18),
+                            ),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      } else if (Platform.isAndroid || Platform.isIOS) {
+                        if (areNotificationsEnabled) {
+                          await _showTimePicker();
+                        } else {
+                          await _showUnsubscribeConfirmationDialog();
+                        }
+                      }
+                    },
+                  ),
+                  const Divider(),
+                  ListTile(
+                    leading: const Icon(Icons.settings),
+                    title: const Text('Settings'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Settings(
+                            onTemperatureUnitChanged:
+                                _handleTemperatureUnitChanged,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  if (kIsWeb)
                     Text(
-                      'Version: 7.0.1',
+                      'This app is ment to be for mobile so your not going to have the best experience using the app.',
                       style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
+                        fontSize: 15,
+                        color: Colors.red,
                       ),
                     ),
-                  ],
-                ),
+                ],
               ),
-              const Divider(),
-              ListTile(
-                leading: const Icon(Icons.location_on),
-                title: const Text('Saved Locations'),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          CitySelectionScreen(selectedCities: cities),
-                    ),
-                  );
-                },
-              ),
-              const Divider(),
-              ListTile(
-                leading: const Icon(Icons.wb_sunny),
-                title: const Text('What to Wear'),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ClothScreen(
-                        weatherCondition: fiveDayForecast.isNotEmpty
-                            ? fiveDayForecast[0].weatherDescription ?? ''
-                            : 'Unknown',
-                        temperature: fiveDayForecast.isNotEmpty
-                            ? fiveDayForecast[0].temperature?.celsius ?? 0.0
-                            : 0.0,
+              if (kIsWeb)
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 15, bottom: 20),
+                    child: Container(
+                      alignment: Alignment.bottomCenter,
+                      child: SelectableText.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Using web?\n',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 20,
+                              ),
+                            ),
+                            WidgetSpan(
+                              child: SizedBox(height: 30),
+                            ),
+                            TextSpan(
+                              text:
+                                  'You will not get the full app exprience except if you download the app\n',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 15,
+                              ),
+                            ),
+                            WidgetSpan(
+                              child: SizedBox(height: 20),
+                            ),
+                            TextSpan(
+                              text: 'google play:\n',
+                              style: TextStyle(
+                                color: Colors.orange,
+                                fontSize: 15,
+                              ),
+                            ),
+                            WidgetSpan(
+                              child: SizedBox(height: 20),
+                            ),
+                            TextSpan(
+                              text:
+                                  'https://play.google.com/store/apps/details?id=com.halaltek.weatherapp\n',
+                              style: TextStyle(
+                                color: Colors.green,
+                                fontSize: 15,
+                              ),
+                            ),
+                            WidgetSpan(
+                              child: SizedBox(height: 20),
+                            ),
+                            TextSpan(
+                              text: 'IOS:\n',
+                              style: TextStyle(
+                                color: Colors.purple,
+                                fontSize: 15,
+                              ),
+                            ),
+                            WidgetSpan(
+                              child: SizedBox(height: 20),
+                            ),
+                            TextSpan(
+                              text: 'Comming soon!!',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  );
-                },
-              ),
-              const Divider(),
-              ListTile(
-                leading: const Icon(Icons.run_circle),
-                title: const Text('What to Do'),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ActivityScreen(
-                        weatherCondition: fiveDayForecast.isNotEmpty
-                            ? fiveDayForecast[0].weatherDescription ?? ''
-                            : 'Unknown',
-                        temperature: fiveDayForecast.isNotEmpty
-                            ? fiveDayForecast[0].temperature?.celsius ?? 0.0
-                            : 0.0,
-                      ),
-                    ),
-                  );
-                },
-              ),
-              const Divider(),
-              ListTile(
-                leading: Icon(areNotificationsEnabled
-                    ? Icons.notification_add
-                    : Icons.notifications_off),
-                title: Text(areNotificationsEnabled
-                    ? 'Notifications'
-                    : 'Unsubscribe notifications'),
-                onTap: () async {
-                  if (areNotificationsEnabled) {
-                    await _showTimePicker();
-                  } else {
-                    await _showUnsubscribeConfirmationDialog();
-                  }
-                },
-              ),
-              const Divider(),
-              ListTile(
-                leading: const Icon(Icons.settings),
-                title: const Text('Settings'),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Settings(
-                        onTemperatureUnitChanged: _handleTemperatureUnitChanged,
-                      ),
-                    ),
-                  );
-                },
-              ),
+                  ),
+                )
             ],
           ),
         ),
