@@ -294,12 +294,11 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
         int hour = selectedTime.hour;
         int minute = selectedTime.minute;
 
-        DateTime now = DateTime.now();
+        await fetchFiveDayForecast();
+
         Weather currentForecast = fiveDayForecast.firstWhere(
           (forecast) =>
-              forecast.date!.day == now.day &&
-              forecast.date!.month == now.month &&
-              forecast.date!.year == now.year,
+              forecast.date!.hour == hour && forecast.date!.minute == minute,
           orElse: () => fiveDayForecast.first,
         );
 
@@ -741,7 +740,7 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
                         const Text('Weather 360'),
                         SizedBox(height: 3),
                         Text(
-                          'Version: 7.0.1',
+                          'Version: 7.0.2',
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey,

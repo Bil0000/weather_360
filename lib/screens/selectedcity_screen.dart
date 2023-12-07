@@ -44,8 +44,14 @@ class _CitySelectionScreenState extends State<CitySelectionScreen> {
         }
 
         if (selectedCities.isNotEmpty) {
-          final random = Random();
-          selectedCity = selectedCities[random.nextInt(selectedCities.length)];
+          String newSelectedCity;
+          do {
+            final random = Random();
+            newSelectedCity =
+                selectedCities[random.nextInt(selectedCities.length)];
+          } while (newSelectedCity == cityToRemove);
+
+          selectedCity = newSelectedCity;
           setLastSelectedCity(selectedCity!);
 
           fetchWeatherForCity(selectedCity!);
@@ -347,124 +353,114 @@ class _CitySelectionScreenState extends State<CitySelectionScreen> {
                         : 1,
                     itemBuilder: (context, index) {
                       if (index == selectedCities.length) {
-                        return Dismissible(
-                          key: ValueKey("add_new"),
-                          child: Stack(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 20, right: 20, top: 15, bottom: 50),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: const Color.fromRGBO(
-                                          170, 165, 165, 0.7),
-                                      borderRadius: BorderRadius.circular(30)),
-                                  child: ListTile(
-                                    title: const Center(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.add_circle_outline,
+                        return Stack(
+                          key: ValueKey('add new'),
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 20, right: 20, top: 15, bottom: 50),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: const Color.fromRGBO(
+                                        170, 165, 165, 0.7),
+                                    borderRadius: BorderRadius.circular(30)),
+                                child: ListTile(
+                                  title: const Center(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.add_circle_outline,
+                                          color: Colors.white,
+                                        ),
+                                        SizedBox(width: 5),
+                                        Text(
+                                          'Add New',
+                                          style: TextStyle(
                                             color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
                                           ),
-                                          SizedBox(width: 5),
-                                          Text(
-                                            'Add New',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
-                                    onTap: () async {
-                                      if (selectedCities.length < maxCities) {
-                                        final selectedCity = await showSearch(
-                                          context: context,
-                                          delegate: CitySearchDelegate(),
-                                        );
-                                        if (selectedCity != null) {
-                                          setState(() {
-                                            if (!selectedCities
-                                                .contains(selectedCity)) {
-                                              saveSelectedCities(
-                                                  selectedCities);
-                                              selectedCities.add(selectedCity);
-                                              fetchWeatherForCity(selectedCity);
-                                              fetchFiveDayForecast();
+                                  ),
+                                  onTap: () async {
+                                    if (selectedCities.length < maxCities) {
+                                      final selectedCity = await showSearch(
+                                        context: context,
+                                        delegate: CitySearchDelegate(),
+                                      );
+                                      if (selectedCity != null) {
+                                        setState(() {
+                                          if (!selectedCities
+                                              .contains(selectedCity)) {
+                                            saveSelectedCities(selectedCities);
+                                            selectedCities.add(selectedCity);
+                                            fetchWeatherForCity(selectedCity);
+                                            fetchFiveDayForecast();
 
-                                              setLastSelectedCity(selectedCity);
+                                            setLastSelectedCity(selectedCity);
 
-                                              fetchFiveDayForecast();
-                                            } else {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                SnackBar(
-                                                  content: Text(
-                                                    '$selectedCity is already in the list.',
-                                                    style: const TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 17),
-                                                  ),
-                                                  backgroundColor: Colors.red,
+                                            fetchFiveDayForecast();
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  '$selectedCity is already in the list.',
+                                                  style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 17),
                                                 ),
-                                              );
-                                            }
-                                          });
-                                        }
-                                      } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              'You have reached the maximum limit of $maxCities cities. Remove one or choose a different city.',
-                                              style: const TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                            backgroundColor: Colors.red,
-                                          ),
-                                        );
+                                                backgroundColor: Colors.red,
+                                              ),
+                                            );
+                                          }
+                                        });
                                       }
-                                    },
-                                  ),
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            'You have reached the maximum limit of $maxCities cities. Remove one or choose a different city.',
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          ),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                    }
+                                  },
                                 ),
                               ),
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: TextButton(
-                                  onPressed: () {
-                                    launchUrl(
-                                      Uri.parse(
-                                        'https://docs.google.com/document/d/1b0KkCUpEP7qoyiw0bf-AJKPJ-Dkb9PeomYUEUwk4VyY/edit?usp=sharing',
-                                      ),
-                                    );
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 15, bottom: 15),
-                                    child: Text(
-                                      'Privacy Policy',
-                                      style: TextStyle(
-                                        color: Colors.blue[300],
-                                      ),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: TextButton(
+                                onPressed: () {
+                                  launchUrl(
+                                    Uri.parse(
+                                      'https://docs.google.com/document/d/1b0KkCUpEP7qoyiw0bf-AJKPJ-Dkb9PeomYUEUwk4VyY/edit?usp=sharing',
+                                    ),
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: 15, bottom: 15),
+                                  child: Text(
+                                    'Privacy Policy',
+                                    style: TextStyle(
+                                      color: Colors.blue[300],
                                     ),
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
-                          onDismissed: (direction) async {
-                            if (direction == DismissDirection.endToStart) {
-                              await showConfirmDismissDialog(
-                                  context, "Add New");
-                            }
-                          },
-                          background: Container(),
+                            ),
+                          ],
                         );
                       } else {
                         final city = selectedCities[index];
