@@ -110,6 +110,7 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
         AwesomeNotifications().createNotification(
             content: NotificationContent(
           id: 1,
+          badge: 1,
           channelKey: 'weather_channel',
           title: 'Weather 360 update!',
           body:
@@ -305,6 +306,7 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
         AwesomeNotifications().createNotification(
           content: NotificationContent(
             id: 1,
+            badge: 1,
             channelKey: "weather_channel",
             title: "Weather 360",
             body:
