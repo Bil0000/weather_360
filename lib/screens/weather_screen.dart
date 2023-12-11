@@ -304,7 +304,6 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
 
         AwesomeNotifications().createNotification(
           content: NotificationContent(
-            badge: 1,
             id: 1,
             channelKey: "weather_channel",
             title: "Weather 360",
@@ -667,8 +666,7 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
                                                                 formatDateToDayName(
                                                                     firstForecast
                                                                         .date!)
-                                                            ? Colors
-                                                                .blue // Change color for the selected day
+                                                            ? Colors.blue
                                                             : Colors.white,
                                                       ),
                                                     ),
@@ -740,7 +738,7 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
                         const Text('Weather 360'),
                         SizedBox(height: 3),
                         Text(
-                          'Version: 7.0.2',
+                          'Version: 8.0.0',
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey,

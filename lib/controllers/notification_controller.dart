@@ -9,7 +9,9 @@ class NotificationController {
   /// Use this method to detect every time that a new notification is displayed
   @pragma("vm:entry-point")
   static Future<void> onNotificationDisplayedMethod(
-      ReceivedNotification receivedNotification) async {}
+      ReceivedNotification receivedNotification) async {
+    AwesomeNotifications().incrementGlobalBadgeCounter();
+  }
 
   @pragma("vm:entry-point")
   static Future<void> onDismissActionReceivedMethod(
