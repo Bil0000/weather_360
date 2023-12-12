@@ -303,10 +303,13 @@ class _WeatherPageState extends State<WeatherPage> with WidgetsBindingObserver {
           orElse: () => fiveDayForecast.first,
         );
 
+        int currentBadge =
+            await AwesomeNotifications().getGlobalBadgeCounter() + 1;
+
         AwesomeNotifications().createNotification(
           content: NotificationContent(
             id: 1,
-            badge: 1,
+            badge: currentBadge,
             channelKey: "weather_channel",
             title: "Weather 360",
             body:
